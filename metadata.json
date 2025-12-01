@@ -1,0 +1,7 @@
+{
+  "name": "LankaRelief",
+  "description": "A centralized disaster management and coordination platform for Sri Lanka featuring donation tracking, person finder, and volunteer mobilization.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
