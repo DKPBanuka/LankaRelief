@@ -1,0 +1,50 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if data is valid
+    function isValidData() {
+      return request.resource.data.keys().hasAll(['createdAt']);
+    }
+
+    // Needs Collection
+    match /needs/{needId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if true; // Currently relying on client-side PIN check
+    }
+
+    // People Collection (Person Finder)
+    match /people/{personId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if true; // Currently relying on client-side PIN check
+    }
+
+    // Volunteers Collection
+    match /volunteers/{volunteerId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if true;
+    }
+
+    // Events Collection
+    match /events/{eventId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if true;
+    }
+
+    // Service Requests Collection
+    match /service_requests/{requestId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if true;
+    }
+
+    // Default deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

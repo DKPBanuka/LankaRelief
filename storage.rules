@@ -1,0 +1,16 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      // Allow read access to everyone
+      allow read: if true;
+
+      // Allow write access if:
+      // 1. It's an image
+      // 2. Size is less than 5MB
+      allow write: if request.resource.contentType.matches('image/.*')
+                   && request.resource.size < 5 * 1024 * 1024;
+    }
+  }
+}
