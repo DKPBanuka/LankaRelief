@@ -19,7 +19,7 @@ jobs:
           node-version: 22
 
       - name: Install Dependencies
-        run: npm ci  # 5. package-lock.json එක අනුව හරියටම ලයිබ්‍රරි ටික දාගන්නවා
+        run: npm install
 
       - name: Build App
         run: npm run build # 6. React App එක Build කරනවා (dist folder එක හැදෙනවා)
