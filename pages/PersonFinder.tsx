@@ -79,7 +79,7 @@ export const PersonFinder: React.FC = () => {
       if (sortBy === 'newest') return (b.updatedAt || 0) - (a.updatedAt || 0);
       return (a.updatedAt || 0) - (b.updatedAt || 0);
     });
-    console.log("PersonFinder: filteredPeople", result.map(p => ({ name: p.name, status: p.status, hasCoords: !!p.coordinates, coords: p.coordinates })));
+
     return result;
   }, [people, searchTerm, filterStatus, filterDistrict, sortBy]);
 
@@ -498,6 +498,18 @@ export const PersonFinder: React.FC = () => {
           )}
 
           <form onSubmit={handleReportSubmit} className="space-y-8">
+
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="font-semibold text-yellow-800 mb-1">{t.disclaimerTitle}</h4>
+                  <p className="text-sm text-yellow-700 leading-relaxed">
+                    {t.disclaimerText}
+                  </p>
+                </div>
+              </div>
+            </div>
             {/* Missing Person Details */}
             <section className="space-y-4">
               <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Missing Person Details</h3>
@@ -541,6 +553,7 @@ export const PersonFinder: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.lastSeenDate}</label>
                   <input
                     type="date"
+                    max={new Date().toISOString().split('T')[0]}
                     value={reportForm.lastSeenDate}
                     onChange={e => setReportForm({ ...reportForm, lastSeenDate: e.target.value })}
                     className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none"

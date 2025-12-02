@@ -108,6 +108,8 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
             <p className="text-sm text-gray-600 mb-2">{t.callDMC}</p>
             <a href="tel:117" className="block w-full py-2 bg-red-600 text-white text-center rounded-lg text-sm font-bold hover:bg-red-700">117</a>
           </div>
+
+
         </div>
       </aside>
 

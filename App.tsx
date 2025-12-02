@@ -7,7 +7,8 @@ import { Dashboard } from './pages/Dashboard';
 import { Donations } from './pages/Donations';
 import { PersonFinder } from './pages/PersonFinder';
 import { Volunteers } from './pages/Volunteers';
-import { AdminDashboard } from './pages/Admin/AdminDashboard';
+import AdminApp from './pages/Admin/ra/AdminApp';
+
 
 const AppContent: React.FC = () => {
   const [page, setPage] = useState('dashboard');
@@ -22,10 +23,15 @@ const AppContent: React.FC = () => {
       case 'finder': return <PersonFinder />;
       case 'volunteers': return <Volunteers />;
       case 'admin':
-        return isAdmin ? <AdminDashboard /> : <Dashboard />;
+        return isAdmin ? <AdminApp /> : <Dashboard />;
+
       default: return <Dashboard />;
     }
   };
+
+  if (page === 'admin') {
+    return isAdmin ? <AdminApp /> : <Dashboard />;
+  }
 
   return (
     <Layout currentPage={page} onNavigate={setPage}>

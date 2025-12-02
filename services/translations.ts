@@ -213,7 +213,7 @@ export const translations = {
     submitting: "Submitting Request...",
 
     disclaimerTitle: "IMPORTANT DISCLAIMER:",
-    disclaimerText: "Due to the emergency nature of this situation, all personal information submitted through this form (including name, phone number, and location) will be publicly visible to relief groups, volunteers, and anyone accessing this platform. This enables fast coordination during the crisis. If you do not want your details to be shared publicly, please do not submit this form. It is the sole responsibility of donors and volunteers to verify the authenticity of help requests before providing assistance. This platform serves only as a coordination tool and assumes no responsibility for any damages, losses, or outcomes arising from interactions facilitated through this service.",
+    disclaimerText: "Due to the emergency nature of this situation, all personal information submitted through this form (including name, phone number, and location) will be publicly visible to relief groups, volunteers, and anyone accessing this platform. This enables fast coordination during the crisis. If you do not want your details to be shared publicly, please do not submit this form.",
 
     // Map Legend
     legend: {
@@ -250,7 +250,7 @@ export const translations = {
     activeVolunteers: "ස්වෙච්ඡා සේවකයන්",
     needsByDistrict: "දිස්ත්‍රික්ක අනුව අවශ්‍යතා",
     heroTitle: "රටට ඔබව අවශ්‍යයි.",
-    heroSub: "ඔබේ දෑතින් පිස දමන්න කඳුළක්... අසරණ වූ ජීවිත වලට අත්වැලක් වන්න.",
+    heroSub: "බලාපොරොත්තු බිඳුණු දෑසකට, ජීවිතය දකින්න පාර කියමු. රට වෙනුවෙන් එක්වෙමු.",
 
     // Donations
     donationTitle: "ආධාර සම්බන්ධීකරණය",
@@ -443,7 +443,7 @@ export const translations = {
     submitting: "යොමු කරමින් පවතී...",
 
     disclaimerTitle: "වැදගත් නිවේදනයක්:",
-    disclaimerText: "මෙම අවස්ථාවේ හදිසි ස්වභාවය හේතුවෙන්, ඔබ ලබා දෙන සියලුම තොරතුරු (නම, දුරකථන අංකය සහ ස්ථානය ඇතුළුව) සහන කණ්ඩායම් සහ ස්වෙච්ඡා සේවකයන්ට ප්‍රසිද්ධියේ දිස්වනු ඇත. මෙය කඩිනම් සහන සැලසීම සඳහා ය. ඔබට ඔබේ තොරතුරු ප්‍රසිද්ධ කිරීමට අකමැති නම්, කරුණාකර මෙම පෝරමය පුරවන්න එපා. ආධාර කිරීමට පෙර තොරතුරු තහවුරු කර ගැනීම පරිත්‍යාගශීලීන්ගේ වගකීමකි.",
+    disclaimerText: "මෙම අවස්ථාවේ හදිසි ස්වභාවය හේතුවෙන්, මෙම පෝරමය හරහා ඉදිරිපත් කරන සියලුම පුද්ගලික තොරතුරු (නම, දුරකථන අංකය සහ ස්ථානය ඇතුළුව) සහන කණ්ඩායම්, ස්වෙච්ඡා සේවකයන් සහ මෙම වේදිකාවට පිවිසෙන ඕනෑම කෙනෙකුට ප්‍රසිද්ධියේ දිස්වනු ඇත. මෙය අර්බුද අවස්ථාවේදී කඩිනම් සම්බන්ධීකරණයට ඉඩ සලසයි. ඔබේ තොරතුරු ප්‍රසිද්ධියේ බෙදා ගැනීමට ඔබ අකමැති නම්, කරුණාකර මෙම පෝරමය ඉදිරිපත් නොකරන්න.",
 
     // Map Legend
     legend: {

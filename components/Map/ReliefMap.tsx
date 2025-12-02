@@ -72,7 +72,7 @@ const MapUpdater: React.FC<{ items: (Need | Event | Person | Volunteer | Service
     const map = useMap();
 
     useEffect(() => {
-        if (focusedLocation) {
+        if (focusedLocation && typeof focusedLocation.lat === 'number' && !isNaN(focusedLocation.lat) && typeof focusedLocation.lng === 'number' && !isNaN(focusedLocation.lng)) {
             map.flyTo([focusedLocation.lat, focusedLocation.lng], 15, {
                 duration: 1.5
             });
@@ -100,8 +100,13 @@ export const ReliefMap: React.FC<ReliefMapProps> = ({ items, height = '400px', l
     // Filter out completed items and items without coordinates
     const itemsWithCoords = items.filter(item => {
         const hasLocationObj = 'location' in item && typeof item.location === 'object' && item.location !== null;
-        const hasCoords = !!item.coordinates || (hasLocationObj && !!(item.location as any)?.coordinates);
-        if (!hasCoords) return false;
+        const coords = hasLocationObj && 'coordinates' in (item.location as any)
+            ? (item.location as any).coordinates
+            : item.coordinates;
+
+        const hasValidCoords = coords && typeof coords.lat === 'number' && !isNaN(coords.lat) && typeof coords.lng === 'number' && !isNaN(coords.lng);
+
+        if (!hasValidCoords) return false;
 
         // Filter out completed needs (but not ServiceRequests which have 'details')
         if ('status' in item && !('details' in item) && (item as Need).status === NeedStatus.RECEIVED) {
