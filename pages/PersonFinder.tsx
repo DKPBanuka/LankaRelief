@@ -35,7 +35,8 @@ export const PersonFinder: React.FC = () => {
     message: '',
 
     disclaimerChecked: false,
-    secretPin: ''
+    secretPin: '',
+    descriptionTranslations: undefined as { en: string; si: string } | undefined
   });
 
   // Edit Mode State
@@ -52,17 +53,39 @@ export const PersonFinder: React.FC = () => {
   const [isImproving, setIsImproving] = useState(false);
 
   const handleImproveDescription = async () => {
-    if (!reportForm.physicalDescription.trim()) return;
     setIsImproving(true);
     try {
-      const improved = await refineNeedDescription("Missing Person Description", reportForm.lastSeenLocation || "Sri Lanka", reportForm.physicalDescription);
-      setReportForm(prev => ({ ...prev, physicalDescription: improved }));
+      const result = await generateBilingualDescription({
+        name: reportForm.name,
+        age: reportForm.age,
+        gender: reportForm.gender,
+        lastSeenLocation: reportForm.lastSeenLocation,
+        lastSeenDate: reportForm.lastSeenDate,
+        physicalDescription: reportForm.physicalDescription,
+        district: reportForm.district
+      });
+
+      setReportForm(prev => ({
+        ...prev,
+        physicalDescription: t.lang === 'si' ? result.si : result.en,
+        descriptionTranslations: result
+      }));
     } catch (error) {
       console.error("AI Improvement failed:", error);
     } finally {
       setIsImproving(false);
     }
   };
+
+  // Auto-translate description when language changes
+  useEffect(() => {
+    if (reportForm.descriptionTranslations) {
+      const newDesc = t.lang === 'si' ? reportForm.descriptionTranslations.si : reportForm.descriptionTranslations.en;
+      if (newDesc && newDesc !== reportForm.physicalDescription) {
+        setReportForm(prev => ({ ...prev, physicalDescription: newDesc }));
+      }
+    }
+  }, [t.lang, reportForm.descriptionTranslations]);
 
   const filteredPeople = useMemo(() => {
     const result = people.filter(p => {
@@ -182,7 +205,8 @@ export const PersonFinder: React.FC = () => {
       reporterContact: '',
       message: '',
       disclaimerChecked: false,
-      secretPin: ''
+      secretPin: '',
+      descriptionTranslations: undefined
     });
   };
 

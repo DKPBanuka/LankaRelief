@@ -84,3 +84,62 @@ export const refineNeedDescription = async (
     return userNotes;
   }
 };
+
+
+export const generateBilingualDescription = async (
+  data: {
+    name: string;
+    age: string;
+    gender: string;
+    lastSeenLocation: string;
+    lastSeenDate: string;
+    physicalDescription: string;
+    district: string;
+  }
+): Promise<{ en: string; si: string }> => {
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  if (!apiKey) return { en: data.physicalDescription, si: data.physicalDescription };
+
+  const ai = new GoogleGenAI({ apiKey });
+
+  const prompt = `
+    Generate a physical description for a missing person report based on these details:
+    Name: ${data.name}
+    Age: ${data.age}
+    Gender: ${data.gender}
+    Last Seen: ${data.lastSeenLocation} (${data.district}) on ${data.lastSeenDate}
+    User's Draft Description: ${data.physicalDescription}
+
+    Task:
+    1. Create a clear, empathetic, and descriptive paragraph in English (max 50 words).
+    2. Create a clear, empathetic, and descriptive paragraph in Sinhala (max 50 words).
+    3. If the user's draft is empty, generate a description based on the other details (e.g., "A [Age] year old [Gender] was last seen in [Location]...").
+    4. If the user's draft is provided, improve it and translate it.
+
+    Output Format: JSON only.
+    {
+      "en": "English description here...",
+      "si": "Sinhala description here..."
+    }
+  `;
+
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+      config: {
+        responseMimeType: 'application/json',
+      }
+    });
+
+    const text = response.text || "{}";
+    const json = JSON.parse(text);
+    return {
+      en: json.en || data.physicalDescription,
+      si: json.si || data.physicalDescription
+    };
+  } catch (error) {
+    console.error("Gemini Translation Error:", error);
+    return { en: data.physicalDescription, si: data.physicalDescription };
+  }
+};
