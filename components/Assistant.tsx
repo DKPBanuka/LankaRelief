@@ -7,7 +7,7 @@ import { ChatMessage } from '../types';
 export const Assistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: '0', role: 'model', text: 'Ayubowan! I am the athwela.png (අත්වැල) AI assistant. How can I help you today?' }
+    { id: '0', role: 'model', text: 'Ayubowan! I am the Lanka Relief AI assistant. How can I help you today?' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -69,7 +69,7 @@ export const Assistant: React.FC = () => {
           <div className="bg-blue-600 p-4 flex justify-between items-center text-white">
             <div className="flex items-center gap-2">
               <Bot size={20} />
-              <h3 className="font-semibold">athwela.png Assistant</h3>
+              <h3 className="font-semibold">Lanka Relief Assistant</h3>
             </div>
             <button onClick={() => setIsOpen(false)} className="hover:bg-blue-700 p-1 rounded">
               <X size={20} />

@@ -23,7 +23,7 @@ export const generateAssistantResponse = async (
   `;
 
   const prompt = `
-    You are the AI Assistant for "athwela.png", a disaster management platform in Sri Lanka.
+    You are the AI Assistant for "Lanka Relief", a disaster management platform in Sri Lanka.
     Your goal is to help users find information about donations, missing people, and volunteer opportunities based on the provided data.
     
     Context Data:
@@ -62,7 +62,7 @@ export const refineNeedDescription = async (
   const ai = new GoogleGenAI({ apiKey });
 
   const prompt = `
-    A user is posting a disaster relief request on "athwela.png".
+    A user is posting a disaster relief request on "Lanka Relief".
     Item: ${item}
     Location: ${location}
     User Notes: ${userNotes}

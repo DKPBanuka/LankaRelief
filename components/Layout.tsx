@@ -38,7 +38,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
       <aside className="hidden lg:flex w-64 bg-white border-r border-gray-200 flex-col fixed inset-y-0 z-20">
         <div className="p-6 border-b border-gray-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src="/athwela.png" alt="LankaRelief" className="w-10 h-10 object-contain" />
+            <img src="/LankaRelief.png" alt="LankaRelief" className="w-10 h-10 object-contain" />
             <span className="text-xl font-bold text-gray-900">{t.appTitle}</span>
           </div>
         </div>
@@ -114,7 +114,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
       {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 inset-x-0 h-16 bg-white border-b border-gray-200 z-20 px-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <img src="/athwela.png" alt="LankaRelief" className="w-10 h-10 object-contain" />
+          <img src="/LankaRelief.png" alt="LankaRelief" className="w-10 h-10 object-contain" />
           <span className="text-xl font-bold text-gray-900">{t.appTitle}</span>
         </div>
         <div className="flex items-center gap-3">

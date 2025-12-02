@@ -349,7 +349,7 @@ export const PersonFinder: React.FC = () => {
                 <div className="grid grid-cols-1 gap-3">
                   {filteredPeople.map((person) => (
                     <div key={person.id} className="bg-white p-3 rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all group relative">
-                      {localStorage.getItem('athwela_my_posts')?.includes(person.id) && (
+                      {localStorage.getItem('lankarelief_my_posts')?.includes(person.id) && (
                         <button
                           onClick={(e) => { e.stopPropagation(); handleDeleteClick(person.id); }}
                           className="absolute top-2 right-2 p-1.5 bg-red-100 text-red-600 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"
@@ -358,7 +358,7 @@ export const PersonFinder: React.FC = () => {
                           <Trash2 size={16} />
                         </button>
                       )}
-                      {localStorage.getItem('athwela_my_posts')?.includes(person.id) && (
+                      {localStorage.getItem('lankarelief_my_posts')?.includes(person.id) && (
                         <button
                           onClick={(e) => { e.stopPropagation(); handleEditClick(person); }}
                           className="absolute top-2 right-10 p-1.5 bg-blue-100 text-blue-600 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"

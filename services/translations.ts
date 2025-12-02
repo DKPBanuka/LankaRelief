@@ -1,6 +1,6 @@
 export const translations = {
   en: {
-    appTitle: "අත්වැල",
+    appTitle: "Lanka Relief",
     dashboard: "Dashboard",
     donations: "Donations",
     personFinder: "Person Finder",
@@ -17,7 +17,7 @@ export const translations = {
     needsByDistrict: "Needs by District",
     latestActivity: "Latest Activity",
     heroTitle: "Sri Lanka Needs You.",
-    heroSub: "athwela.png coordinates real-time disaster response, connecting donors with victims.",
+    heroSub: "Lanka Relief coordinates real-time disaster response, connecting donors with victims.",
 
     // Donations
     donationTitle: "Donation Coordination",
@@ -234,7 +234,7 @@ export const translations = {
     }
   },
   si: {
-    appTitle: "අත්වැල",
+    appTitle: "Lanka Relief",
     dashboard: "තොරතුරු පුවරුව",
     donations: "ආධාර",
     personFinder: "පුද්ගලයින් සොයන්න",

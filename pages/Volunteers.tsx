@@ -235,7 +235,7 @@ export const Volunteers: React.FC = () => {
 
                 activeMissions.map(mission => (
                   <div key={mission.id} className="border border-gray-100 rounded-xl p-4 hover:shadow-md transition-shadow bg-gray-50/50 flex flex-col h-full relative group">
-                    {localStorage.getItem('athwela_my_posts')?.includes(mission.id) && (
+                    {localStorage.getItem('lankarelief_my_posts')?.includes(mission.id) && (
                       <button
                         onClick={(e) => { e.stopPropagation(); handleDeleteClick(mission.id); }}
                         className="absolute top-2 right-2 p-1.5 bg-red-100 text-red-600 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"

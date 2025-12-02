@@ -165,11 +165,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       });
 
       // Save to donor's local storage
-      const existing = localStorage.getItem('athwela_my_pledges');
+      const existing = localStorage.getItem('lankarelief_my_pledges');
       const pledges = existing ? JSON.parse(existing) : [];
       if (!pledges.includes(id)) {
         pledges.push(id);
-        localStorage.setItem('athwela_my_pledges', JSON.stringify(pledges));
+        localStorage.setItem('lankarelief_my_pledges', JSON.stringify(pledges));
       }
 
     } catch (error) {
@@ -299,10 +299,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const savePostIdToLocalStorage = (id: string) => {
-    const existing = localStorage.getItem('athwela_my_posts');
+    const existing = localStorage.getItem('lankarelief_my_posts');
     const posts = existing ? JSON.parse(existing) : [];
     posts.push(id);
-    localStorage.setItem('athwela_my_posts', JSON.stringify(posts));
+    localStorage.setItem('lankarelief_my_posts', JSON.stringify(posts));
   };
 
   const deleteWithPin = async (collectionName: string, docId: string, pin: string) => {
@@ -323,11 +323,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       await deleteDoc(docRef);
 
       // Remove from local storage if successful
-      const existing = localStorage.getItem('athwela_my_posts');
+      const existing = localStorage.getItem('lankarelief_my_posts');
       if (existing) {
         const posts = JSON.parse(existing);
         const newPosts = posts.filter((p: string) => p !== docId);
-        localStorage.setItem('athwela_my_posts', JSON.stringify(newPosts));
+        localStorage.setItem('lankarelief_my_posts', JSON.stringify(newPosts));
       }
     } catch (error: any) {
       console.error("Error deleting with PIN:", error);

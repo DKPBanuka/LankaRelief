@@ -319,8 +319,8 @@ export const Donations: React.FC = () => {
     const matchesCategory = filterCategory === 'All' || n.category === filterCategory;
     const matchesUrgency = filterUrgency === 'All' || n.urgency === filterUrgency;
 
-    const isMyPost = localStorage.getItem('athwela_my_posts')?.includes(n.id);
-    const isMyPledge = localStorage.getItem('athwela_my_pledges')?.includes(n.id);
+    const isMyPost = localStorage.getItem('lankarelief_my_posts')?.includes(n.id);
+    const isMyPledge = localStorage.getItem('lankarelief_my_pledges')?.includes(n.id);
 
     // Visibility Logic:
     // 1. REQUESTED or PARTIALLY_PLEDGED: Visible to everyone
@@ -590,7 +590,7 @@ export const Donations: React.FC = () => {
 
 
                     <div className="p-5 pt-0 flex gap-2">
-                      {localStorage.getItem('athwela_my_posts')?.includes(need.id) && (
+                      {localStorage.getItem('lankarelief_my_posts')?.includes(need.id) && (
                         <>
                           <button
                             onClick={() => handleDeleteClick(need.id)}
@@ -615,17 +615,17 @@ export const Donations: React.FC = () => {
                       >
                         <Share2 size={20} />
                       </button>
-                      {(need.status === NeedStatus.REQUESTED || need.status === NeedStatus.PARTIALLY_PLEDGED) && !localStorage.getItem('athwela_my_posts')?.includes(need.id) && (
+                      {(need.status === NeedStatus.REQUESTED || need.status === NeedStatus.PARTIALLY_PLEDGED) && !localStorage.getItem('lankarelief_my_posts')?.includes(need.id) && (
                         <button
                           onClick={(e) => { e.stopPropagation(); handlePledgeClick(need); }}
                           className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
                         >
-                          {localStorage.getItem('athwela_my_pledges')?.includes(need.id) ? "Pledge More" : t.pledgeHelp}
+                          {localStorage.getItem('lankarelief_my_pledges')?.includes(need.id) ? "Pledge More" : t.pledgeHelp}
                         </button>
                       )}
 
                       {/* Requester Actions */}
-                      {localStorage.getItem('athwela_my_posts')?.includes(need.id) && (
+                      {localStorage.getItem('lankarelief_my_posts')?.includes(need.id) && (
                         <>
                           {(need.status === NeedStatus.FULLY_PLEDGED || need.status === NeedStatus.PARTIALLY_PLEDGED) && (
                             <div className="flex flex-col gap-2 w-full">
@@ -654,7 +654,7 @@ export const Donations: React.FC = () => {
                       )}
 
                       {/* Donor Actions */}
-                      {localStorage.getItem('athwela_my_pledges')?.includes(need.id) && (
+                      {localStorage.getItem('lankarelief_my_pledges')?.includes(need.id) && (
                         <div className="flex-1 bg-blue-50 text-blue-700 py-2 rounded-lg text-sm font-medium text-center border border-blue-100">
                           You Pledged
                         </div>
