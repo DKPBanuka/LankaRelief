@@ -2,7 +2,7 @@
 
 **Lanka Relief** (formerly Athwela) is a comprehensive disaster management platform designed to coordinate real-time relief efforts in Sri Lanka. It connects donors with victims, helps locate missing persons, and mobilizes volunteer task forces during emergencies.
 
-![Lanka Relief Banner](/public/athwela.png)
+![Lanka Relief Banner](/public/LankaRelief.png)
 
 ## 🚀 Features
 
