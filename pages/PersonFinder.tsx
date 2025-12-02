@@ -70,8 +70,9 @@ export const PersonFinder: React.FC = () => {
         physicalDescription: t.lang === 'si' ? result.si : result.en,
         descriptionTranslations: result
       }));
-    } catch (error) {
+    } catch (error: any) {
       console.error("AI Improvement failed:", error);
+      alert(`AI Refinement failed: ${error.message || "Unknown error"}. Please check your internet connection or API key.`);
     } finally {
       setIsImproving(false);
     }

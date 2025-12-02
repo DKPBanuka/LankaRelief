@@ -41,7 +41,7 @@ export const generateAssistantResponse = async (
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-1.5-flash',
       contents: prompt,
     });
     return response.text || "I'm having trouble connecting to the network right now.";
@@ -76,7 +76,7 @@ export const refineNeedDescription = async (
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-1.5-flash',
       contents: prompt,
     });
     return response.text || userNotes;
@@ -98,7 +98,10 @@ export const generateBilingualDescription = async (
   }
 ): Promise<{ en: string; si: string }> => {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-  if (!apiKey) return { en: data.physicalDescription, si: data.physicalDescription };
+  if (!apiKey) {
+    console.warn("Gemini API Key is missing");
+    throw new Error("API Key is missing. Please check your .env file.");
+  }
 
   const ai = new GoogleGenAI({ apiKey });
 
@@ -125,7 +128,7 @@ export const generateBilingualDescription = async (
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-1.5-flash',
       contents: prompt,
       config: {
         responseMimeType: 'application/json',
