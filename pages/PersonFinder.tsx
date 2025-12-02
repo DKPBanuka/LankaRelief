@@ -11,6 +11,7 @@ export const PersonFinder: React.FC = () => {
   const { people, addPerson, deleteWithPin, updatePerson } = useApp();
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'search' | 'report'>('search');
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
 
   // Search State
   const [searchTerm, setSearchTerm] = useState('');
@@ -452,265 +453,273 @@ export const PersonFinder: React.FC = () => {
           )}
         </div>
       ) : (
-        <div className="max-w-3xl mx-auto w-full bg-white p-6 rounded-2xl shadow-sm border border-gray-200 overflow-y-auto">
-          {/* Warning Banner */}
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-r-lg">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="text-red-600 shrink-0 mt-0.5" size={20} />
-              <div>
-                <h3 className="font-bold text-red-800">IMPORTANT</h3>
-                <p className="text-sm text-red-700 mt-1">{t.warning}</p>
+        <div className="max-w-3xl mx-auto animate-in slide-in-from-bottom-4 fade-in duration-500">
+          <div className="bg-white rounded-2xl p-6 shadow-xl border border-red-100">
+            <div className="mb-6 text-center">
+              <h2 className="text-2xl font-bold text-gray-900">{t.markSafeTitle}</h2>
+              <p className="text-gray-500">Please provide accurate details to help locate missing persons.</p>
+            </div>
+
+            {editingPersonId && (
+              <div className="bg-blue-50 border border-blue-200 p-4 mb-6 rounded-lg flex justify-between items-center">
+                <div>
+                  <h3 className="font-bold text-blue-800">Editing Report</h3>
+                  <p className="text-sm text-blue-600">You are updating details for this person.</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setEditingPersonId(null);
+                    resetForm();
+                    setActiveTab('search');
+                  }}
+                  className="text-sm text-blue-700 hover:underline"
+                >
+                  Cancel Edit
+                </button>
               </div>
-            </div>
-          </div>
+            )}
 
-          <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-            <div className="p-2 bg-red-100 rounded-lg text-red-600">
-              <AlertCircle size={24} />
-            </div>
-            {t.markSafeTitle}
-          </h2>
+            <form onSubmit={handleReportSubmit} className="space-y-8">
 
-          {editingPersonId && (
-            <div className="bg-blue-50 border border-blue-200 p-4 mb-6 rounded-lg flex justify-between items-center">
-              <div>
-                <h3 className="font-bold text-blue-800">Editing Report</h3>
-                <p className="text-sm text-blue-600">You are updating details for this person.</p>
-              </div>
-              <button
-                onClick={() => {
-                  setEditingPersonId(null);
-                  resetForm();
-                  setActiveTab('search');
-                }}
-                className="text-sm text-blue-700 hover:underline"
-              >
-                Cancel Edit
-              </button>
-            </div>
-          )}
-
-          <form onSubmit={handleReportSubmit} className="space-y-8">
-
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-              <div className="flex items-start gap-3">
-                <AlertTriangle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold text-yellow-800 mb-1">{t.disclaimerTitle}</h4>
-                  <p className="text-sm text-yellow-700 leading-relaxed">
-                    {t.disclaimerText}
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/* Missing Person Details */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Missing Person Details</h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.fullName} *</label>
-                  <input
-                    required
-                    value={reportForm.name}
-                    onChange={e => setReportForm({ ...reportForm, name: e.target.value })}
-                    type="text"
-                    className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.age}</label>
-                  <input
-                    value={reportForm.age}
-                    onChange={e => setReportForm({ ...reportForm, age: e.target.value })}
-                    type="number"
-                    className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.gender}</label>
-                  <select
-                    value={reportForm.gender}
-                    onChange={e => setReportForm({ ...reportForm, gender: e.target.value as any })}
-                    className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
-                  >
-                    <option value="Male">{t.male}</option>
-                    <option value="Female">{t.female}</option>
-                    <option value="Other">{t.other}</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.lastSeenDate}</label>
-                  <input
-                    type="date"
-                    max={new Date().toISOString().split('T')[0]}
-                    value={reportForm.lastSeenDate}
-                    onChange={e => setReportForm({ ...reportForm, lastSeenDate: e.target.value })}
-                    className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
-                  />
-                </div>
-
-
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.physicalDescription}</label>
-                  <textarea
-                    value={reportForm.physicalDescription}
-                    onChange={e => setReportForm({ ...reportForm, physicalDescription: e.target.value })}
-                    rows={2}
-                    className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
-                    placeholder="Height, clothing, distinctive marks..."
-                  ></textarea>
-                  <div className="mt-2 flex justify-end">
-                    <button
-                      type="button"
-                      onClick={handleImproveDescription}
-                      disabled={isImproving || !reportForm.physicalDescription.trim()}
-                      className="text-xs flex items-center gap-1 text-purple-600 hover:text-purple-700 font-medium disabled:opacity-50"
-                    >
-                      {isImproving ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
-                      Refine with AI
-                    </button>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-yellow-800 mb-1">{t.disclaimerTitle}</h4>
+                    <p className="text-sm text-yellow-700 leading-relaxed">
+                      {t.disclaimerText}
+                    </p>
                   </div>
                 </div>
               </div>
-            </section>
 
-            {/* Location */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Last Seen Location</h3>
+              {/* 1. Missing Person Details */}
+              <div className="bg-red-50 p-6 rounded-xl border border-red-100">
+                <h3 className="text-lg font-bold text-red-800 mb-4 flex items-center gap-2">
+                  <UserCheck size={20} /> Missing Person Details
+                </h3>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">{t.selectOnMap}</label>
-                <LocationPicker onLocationSelect={handleLocationSelect} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t.fullName} *</label>
+                    <input
+                      required
+                      value={reportForm.name}
+                      onChange={e => setReportForm({ ...reportForm, name: e.target.value })}
+                      type="text"
+                      className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-red-500 outline-none bg-white"
+                      placeholder="Full Name"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t.age}</label>
+                    <input
+                      value={reportForm.age}
+                      onChange={e => setReportForm({ ...reportForm, age: e.target.value })}
+                      type="number"
+                      className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-red-500 outline-none bg-white"
+                      placeholder="Age"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t.gender}</label>
+                    <select
+                      value={reportForm.gender}
+                      onChange={e => setReportForm({ ...reportForm, gender: e.target.value as any })}
+                      className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-red-500 outline-none bg-white"
+                    >
+                      <option value="Male">{t.male}</option>
+                      <option value="Female">{t.female}</option>
+                      <option value="Other">{t.other}</option>
+                    </select>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t.physicalDescription}</label>
+                    <div className="relative">
+                      <textarea
+                        value={reportForm.physicalDescription}
+                        onChange={e => setReportForm({ ...reportForm, physicalDescription: e.target.value })}
+                        rows={3}
+                        className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-red-500 outline-none bg-white pr-24"
+                        placeholder="Height, clothing, distinctive marks..."
+                      ></textarea>
+                      <button
+                        type="button"
+                        onClick={handleImproveDescription}
+                        disabled={isImproving || !reportForm.physicalDescription.trim()}
+                        className="absolute bottom-2 right-2 text-xs flex items-center gap-1 bg-purple-100 text-purple-700 px-2 py-1 rounded-md hover:bg-purple-200 transition-colors disabled:opacity-50"
+                      >
+                        {isImproving ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                        Refine AI
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Photo URL (Optional)</label>
+                    <input
+                      type="text"
+                      value={reportForm.image}
+                      onChange={e => setReportForm({ ...reportForm, image: e.target.value })}
+                      className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-red-500 outline-none bg-white"
+                      placeholder="https://example.com/photo.jpg"
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.district}</label>
-                  <select
-                    value={reportForm.district}
-                    onChange={e => setReportForm({ ...reportForm, district: e.target.value as District })}
-                    className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
-                  >
-                    {Object.values(District).map(d => <option key={d} value={d}>{d}</option>)}
-                  </select>
+              {/* 2. Last Seen Location */}
+              <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                <h3 className="text-lg font-bold text-blue-800 mb-4 flex items-center gap-2">
+                  <MapPin size={20} /> Last Seen Location
+                </h3>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t.selectOnMap}</label>
+                    <LocationPicker onLocationSelect={handleLocationSelect} />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t.district}</label>
+                      <select
+                        value={reportForm.district}
+                        onChange={e => setReportForm({ ...reportForm, district: e.target.value as District })}
+                        className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                      >
+                        {Object.values(District).map(d => <option key={d} value={d}>{d}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t.lastSeenLocation} (City/Town)</label>
+                      <input
+                        required
+                        value={reportForm.lastSeenLocation}
+                        onChange={e => setReportForm({ ...reportForm, lastSeenLocation: e.target.value })}
+                        type="text"
+                        className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                        placeholder="e.g. Colombo 03"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t.lastSeenDate}</label>
+                      <input
+                        type="date"
+                        max={new Date().toISOString().split('T')[0]}
+                        value={reportForm.lastSeenDate}
+                        onChange={e => setReportForm({ ...reportForm, lastSeenDate: e.target.value })}
+                        className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                      />
+                    </div>
+                  </div>
                 </div>
+              </div>
+
+              {/* 3. Reporter Details */}
+              <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <UserCheck size={20} /> {t.reporterDetails}
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t.reporterName} *</label>
+                    <input
+                      required
+                      value={reportForm.reporterName}
+                      onChange={e => setReportForm({ ...reportForm, reporterName: e.target.value })}
+                      type="text"
+                      className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-gray-500 outline-none bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t.reporterContact} *</label>
+                    <input
+                      required
+                      value={reportForm.reporterContact}
+                      onChange={e => setReportForm({ ...reportForm, reporterContact: e.target.value })}
+                      type="tel"
+                      className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-gray-500 outline-none bg-white"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t.message}</label>
+                    <textarea
+                      value={reportForm.message}
+                      onChange={e => setReportForm({ ...reportForm, message: e.target.value })}
+                      rows={2}
+                      className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-gray-500 outline-none bg-white"
+                      placeholder="Any other relevant information..."
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              {/* 4. Security */}
+              <div className="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
+                <h3 className="text-sm font-bold text-yellow-800 mb-2 flex items-center gap-2">
+                  <AlertTriangle size={16} /> Security
+                </h3>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.lastSeenLocation} (City/Town)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Secret PIN (4-digits)</label>
                   <input
                     required
-                    value={reportForm.lastSeenLocation}
-                    onChange={e => setReportForm({ ...reportForm, lastSeenLocation: e.target.value })}
                     type="text"
-                    className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
-                    placeholder="e.g. Colombo 03"
+                    maxLength={4}
+                    pattern="\d{4}"
+                    value={reportForm.secretPin}
+                    onChange={e => setReportForm({ ...reportForm, secretPin: e.target.value.replace(/\D/g, '').slice(0, 4) })}
+                    className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none bg-white font-mono tracking-widest text-center"
+                    placeholder="0000"
                   />
+                  <p className="text-xs text-gray-500 mt-1">Required to delete/manage this report later.</p>
                 </div>
               </div>
-            </section>
 
-            {/* Reporter Details */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">{t.reporterDetails}</h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.reporterName} *</label>
+              {/* Disclaimer Checkbox */}
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <label className="flex items-start gap-3 cursor-pointer">
                   <input
-                    required
-                    value={reportForm.reporterName}
-                    onChange={e => setReportForm({ ...reportForm, reporterName: e.target.value })}
-                    type="text"
-                    className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
+                    type="checkbox"
+                    checked={reportForm.disclaimerChecked}
+                    onChange={e => setReportForm({ ...reportForm, disclaimerChecked: e.target.checked })}
+                    className="mt-1 w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
                   />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.reporterContact} *</label>
-                  <input
-                    required
-                    value={reportForm.reporterContact}
-                    onChange={e => setReportForm({ ...reportForm, reporterContact: e.target.value })}
-                    type="tel"
-                    className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.message}</label>
-                  <textarea
-                    value={reportForm.message}
-                    onChange={e => setReportForm({ ...reportForm, message: e.target.value })}
-                    rows={2}
-                    className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
-                    placeholder="Any other relevant information..."
-                  ></textarea>
-                </div>
-              </div>
-            </section>
-
-            {/* Secret PIN */}
-            <section className="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
-              <h3 className="text-sm font-bold text-yellow-800 mb-2 flex items-center gap-2">
-                <AlertTriangle size={16} /> Security
-              </h3>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Secret PIN (4-digits)</label>
-                <input
-                  required
-                  type="text"
-                  maxLength={4}
-                  pattern="\d{4}"
-                  value={reportForm.secretPin}
-                  onChange={e => setReportForm({ ...reportForm, secretPin: e.target.value.replace(/\D/g, '').slice(0, 4) })}
-                  className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none bg-white font-mono tracking-widest text-center"
-                  placeholder="0000"
-                />
-                <p className="text-xs text-gray-500 mt-1">Required to delete/manage this report later.</p>
-              </div>
-            </section>
-
-            {/* Disclaimer */}
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={reportForm.disclaimerChecked}
-                  onChange={e => setReportForm({ ...reportForm, disclaimerChecked: e.target.checked })}
-                  className="mt-1 w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                />
-                <span className="text-sm text-gray-700 leading-relaxed">
-                  {t.disclaimer}
-                </span>
-              </label>
-            </div>
-
-            <div className="flex gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => setActiveTab('search')}
-                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-colors"
-              >
-                {t.cancel}
-              </button>
-              <button
-                type="submit"
-                disabled={!reportForm.disclaimerChecked}
-                className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-red-200"
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <Loader2 className="animate-spin" size={20} />
-                    Submitting...
+                  <span className="text-sm text-gray-700 leading-relaxed">
+                    {t.disclaimer}
                   </span>
-                ) : (
-                  editingPersonId ? "Update Report" : t.markSafeBtn
-                )}
-              </button>
-            </div>
-          </form>
+                </label>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('search')}
+                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-colors"
+                >
+                  {t.cancel}
+                </button>
+                <button
+                  type="submit"
+                  disabled={!reportForm.disclaimerChecked}
+                  className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-red-200"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Loader2 className="animate-spin" size={20} />
+                      Submitting...
+                    </span>
+                  ) : (
+                    editingPersonId ? "Update Report" : t.markSafeBtn
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 
