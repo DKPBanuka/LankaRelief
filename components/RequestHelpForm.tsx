@@ -2,14 +2,42 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
 import { ServiceCategory, ServiceRequest, District, Coordinates } from '../types';
+import { refineNeedDescription } from '../services/geminiService';
 import { LocationPicker } from './Map/LocationPicker';
-import { AlertTriangle, Heart, Truck, Shovel, HelpCircle, Phone, User, Lock, MapPin } from 'lucide-react';
+import { AlertTriangle, Heart, Truck, Shovel, HelpCircle, Phone, User, Lock, MapPin, Sparkles, Loader2 } from 'lucide-react';
 
 export const RequestHelpForm: React.FC = () => {
     const { addServiceRequest } = useApp();
     const { t } = useLanguage();
     const [selectedCategory, setSelectedCategory] = useState<ServiceCategory | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isImproving, setIsImproving] = useState(false);
+
+    const handleImproveCondition = async () => {
+        if (!formData.condition.trim()) return;
+        setIsImproving(true);
+        try {
+            const improved = await refineNeedDescription("Medical Condition", formData.location.address || "Sri Lanka", formData.condition);
+            setFormData(prev => ({ ...prev, condition: improved }));
+        } catch (error) {
+            console.error("AI Improvement failed:", error);
+        } finally {
+            setIsImproving(false);
+        }
+    };
+
+    const handleImproveDescription = async () => {
+        if (!formData.description.trim()) return;
+        setIsImproving(true);
+        try {
+            const improved = await refineNeedDescription("Emergency Situation", formData.location.address || "Sri Lanka", formData.description);
+            setFormData(prev => ({ ...prev, description: improved }));
+        } catch (error) {
+            console.error("AI Improvement failed:", error);
+        } finally {
+            setIsImproving(false);
+        }
+    };
 
     // Form State
     const [formData, setFormData] = useState({
@@ -310,6 +338,17 @@ export const RequestHelpForm: React.FC = () => {
                                         onChange={e => setFormData({ ...formData, condition: e.target.value })}
                                         className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-rose-500 outline-none"
                                     />
+                                    <div className="mt-2 flex justify-end">
+                                        <button
+                                            type="button"
+                                            onClick={handleImproveCondition}
+                                            disabled={isImproving || !formData.condition.trim()}
+                                            className="text-xs flex items-center gap-1 text-rose-600 hover:text-rose-700 font-medium disabled:opacity-50"
+                                        >
+                                            {isImproving ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                                            Refine with AI
+                                        </button>
+                                    </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <input
@@ -364,6 +403,17 @@ export const RequestHelpForm: React.FC = () => {
                                         onChange={e => setFormData({ ...formData, description: e.target.value })}
                                         className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 outline-none"
                                     />
+                                    <div className="mt-2 flex justify-end">
+                                        <button
+                                            type="button"
+                                            onClick={handleImproveDescription}
+                                            disabled={isImproving || !formData.description.trim()}
+                                            className="text-xs flex items-center gap-1 text-orange-600 hover:text-orange-700 font-medium disabled:opacity-50"
+                                        >
+                                            {isImproving ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                                            Refine with AI
+                                        </button>
+                                    </div>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">{t.headcount}</label>

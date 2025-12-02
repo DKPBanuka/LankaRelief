@@ -59,7 +59,7 @@ export const Assistant: React.FC = () => {
         className={`fixed bottom-6 right-6 p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg transition-all z-[2000] ${isOpen ? 'hidden' : 'flex'} items-center gap-2`}
       >
         <Bot size={24} />
-        <span className="font-medium">AI Assistant</span>
+        <span className="font-medium hidden md:inline">AI Assistant</span>
       </button>
 
       {/* Chat Window */}

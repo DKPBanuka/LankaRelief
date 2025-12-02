@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, Home, Heart, UserSearch, Users, X, Settings, Globe, LogIn, LogOut, User } from 'lucide-react';
-import { Assistant } from './Assistant';
+
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 
@@ -196,7 +196,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
         </div>
       </main>
 
-      <Assistant />
+
     </div>
   );
 };

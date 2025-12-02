@@ -2,7 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
 import { Person, District, Coordinates } from '../types';
-import { Search, MapPin, UserCheck, AlertCircle, Loader2, Filter, Plus, Upload, AlertTriangle, Info, ChevronDown, ChevronUp, X, Trash2 } from 'lucide-react';
+import { refineNeedDescription } from '../services/geminiService';
+import { Search, MapPin, UserCheck, AlertCircle, Loader2, Filter, Plus, Upload, AlertTriangle, Info, ChevronDown, ChevronUp, X, Trash2, Sparkles } from 'lucide-react';
 import { ReliefMap } from '../components/Map/ReliefMap';
 import { LocationPicker } from '../components/Map/LocationPicker';
 
@@ -48,6 +49,20 @@ export const PersonFinder: React.FC = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isImproving, setIsImproving] = useState(false);
+
+  const handleImproveDescription = async () => {
+    if (!reportForm.physicalDescription.trim()) return;
+    setIsImproving(true);
+    try {
+      const improved = await refineNeedDescription("Missing Person Description", reportForm.lastSeenLocation || "Sri Lanka", reportForm.physicalDescription);
+      setReportForm(prev => ({ ...prev, physicalDescription: improved }));
+    } catch (error) {
+      console.error("AI Improvement failed:", error);
+    } finally {
+      setIsImproving(false);
+    }
+  };
 
   const filteredPeople = useMemo(() => {
     const result = people.filter(p => {
@@ -397,7 +412,7 @@ export const PersonFinder: React.FC = () => {
                             </div>
                             <div className="flex items-center gap-1">
                               <span className="text-gray-400 font-medium">Gender:</span>
-                              <span className="font-medium text-gray-800">{person.gender}</span>
+                              <span className="font-medium text-gray-800">{t[person.gender.toLowerCase() as keyof typeof t] || person.gender}</span>
                             </div>
                           </div>
 
@@ -543,6 +558,17 @@ export const PersonFinder: React.FC = () => {
                     className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
                     placeholder="Height, clothing, distinctive marks..."
                   ></textarea>
+                  <div className="mt-2 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={handleImproveDescription}
+                      disabled={isImproving || !reportForm.physicalDescription.trim()}
+                      className="text-xs flex items-center gap-1 text-purple-600 hover:text-purple-700 font-medium disabled:opacity-50"
+                    >
+                      {isImproving ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                      Refine with AI
+                    </button>
+                  </div>
                 </div>
               </div>
             </section>

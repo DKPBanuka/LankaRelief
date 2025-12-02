@@ -529,7 +529,9 @@ export const Donations: React.FC = () => {
                           </div>
                           <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
                             {need.category && getCategoryIcon(need.category)}
-                            {need.item}
+                            {need.category && need.category !== 'OTHER'
+                              ? t[`cat${need.category.charAt(0) + need.category.slice(1).toLowerCase()}` as keyof typeof t]
+                              : need.item}
                           </h3>
                           {need.demographics ? (
                             <div className="flex gap-3 mt-2 text-xs text-gray-600">
