@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4 # 4. Node.js install කරගන්නවා
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install Dependencies
         run: npm ci  # 5. package-lock.json එක අනුව හරියටම ලයිබ්‍රරි ටික දාගන්නවා
