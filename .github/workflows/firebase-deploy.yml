@@ -3,18 +3,18 @@ name: Deploy to Firebase Hosting
 on:
   push:
     branches:
-      - main  # 1. main branch එකට push කළාම විතරක් වැඩ කරන්න
+      - main  # 1. Trigger only when pushing to the main branch
 
 jobs:
   build_and_deploy:
-    runs-on: ubuntu-latest  # 2. GitHub එකේ තියෙන Linux (Ubuntu) මැෂින් එකක් ඉල්ලගන්නවා
+    runs-on: ubuntu-latest  # 2. Request a Linux (Ubuntu) runner from GitHub
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4 # 3. අපේ code එක GitHub එකෙන් ඒ මැෂින් එකට ගන්නවා
+        uses: actions/checkout@v4 # 3. Checkout our code from GitHub to the runner
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4 # 4. Node.js install කරගන්නවා
+        uses: actions/setup-node@v4 # 4. Install Node.js
         with:
           node-version: 22
 
@@ -24,7 +24,7 @@ jobs:
           npm install
 
       - name: Build App
-        run: npm run build # 6. React App එක Build කරනවා (dist folder එක හැදෙනවා)
+        run: npm run build # 6. Build the React App (creates dist folder)
         env:
           # Firebase Config Keys
           VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
@@ -38,7 +38,7 @@ jobs:
           VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
 
       - name: Deploy to Firebase
-        uses: FirebaseExtended/action-hosting-deploy@v0 # 7. Firebase එකට Deploy කරන විශේෂ කෑල්ල
+        uses: FirebaseExtended/action-hosting-deploy@v0 # 7. Special action to deploy to Firebase
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LANKA_RELIEF }}

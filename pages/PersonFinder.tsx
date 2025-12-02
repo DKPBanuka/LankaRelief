@@ -267,221 +267,189 @@ export const PersonFinder: React.FC = () => {
 
   return (
     <div className="h-[calc(100vh-100px)] flex flex-col animate-in fade-in duration-500">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">{t.finderTitle}</h1>
-          <p className="text-gray-500 mb-2">{t.finderSub}</p>
-          <div className="flex gap-3 text-sm">
-            <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full font-medium flex items-center gap-1">
-              <AlertCircle size={14} />
-              {people.filter(p => p.status === 'MISSING').length} Missing
-            </span>
-          </div>
-        </div>
-        <div className="flex bg-gray-100 p-1 rounded-xl">
+      {/* Header & Mode Switcher */}
+      <div className="text-center max-w-2xl mx-auto mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">{t.finderTitle}</h1>
+        <p className="text-gray-500 mt-2">{t.finderSub}</p>
+
+        <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={() => setActiveTab('search')}
-            className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${activeTab === 'search' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
+            className={`flex-1 p-6 rounded-2xl border-2 transition-all flex flex-col items-center gap-3 ${activeTab === 'search'
+              ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-md ring-2 ring-blue-100'
+              : 'border-gray-200 bg-white hover:border-blue-300 hover:bg-blue-50/50 text-gray-600'
+              }`}
           >
-            {t.searchTab}
+            <div className={`p-4 rounded-full ${activeTab === 'search' ? 'bg-blue-200' : 'bg-gray-100'}`}>
+              <Search size={32} className={activeTab === 'search' ? 'text-blue-600' : 'text-gray-400'} />
+            </div>
+            <span className="text-lg font-bold">{t.searchTab}</span>
           </button>
+
           <button
             onClick={() => setActiveTab('report')}
-            className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'report' ? 'bg-red-600 text-white shadow-md shadow-red-200' : 'text-gray-500 hover:text-gray-900'}`}
+            className={`flex-1 p-6 rounded-2xl border-2 transition-all flex flex-col items-center gap-3 ${activeTab === 'report'
+              ? 'border-red-600 bg-red-50 text-red-700 shadow-md ring-2 ring-red-100'
+              : 'border-gray-200 bg-white hover:border-red-300 hover:bg-red-50/50 text-gray-600'
+              }`}
           >
-            <Plus size={18} />
-            {t.markSafeTab}
+            <div className={`p-4 rounded-full ${activeTab === 'report' ? 'bg-red-200' : 'bg-gray-100'}`}>
+              <Plus size={32} className={activeTab === 'report' ? 'text-red-600' : 'text-gray-400'} />
+            </div>
+            <span className="text-lg font-bold">{t.markSafeTab}</span>
           </button>
         </div>
       </div>
 
       {activeTab === 'search' ? (
-        <div className="flex-1 flex flex-col min-h-0">
-          {/* Mobile View Toggle */}
-          <div className="lg:hidden flex bg-gray-100 p-1 rounded-lg mb-4 self-start">
-            <button
-              onClick={() => setViewMode('list')}
-              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${viewMode === 'list' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600'}`}
-            >
-              <Filter size={14} />
-              List
-            </button>
-            <button
-              onClick={() => setViewMode('map')}
-              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${viewMode === 'map' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600'}`}
-            >
-              <MapPin size={14} />
-              Map
-            </button>
+        <div className="space-y-6 animate-in slide-in-from-bottom-4 fade-in duration-500">
+          {/* Advanced Filters */}
+          <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Search */}
+            <div className="relative md:col-span-2">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                type="text"
+                placeholder={t.searchPlaceholder}
+                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <X size={16} />
+                </button>
+              )}
+            </div>
+
+            {/* District Filter */}
+            <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg border border-gray-200">
+              <Filter size={18} className="text-gray-400" />
+              <select
+                className="bg-transparent text-sm focus:outline-none text-gray-700 w-full"
+                value={filterDistrict}
+                onChange={(e) => setFilterDistrict(e.target.value as any)}
+              >
+                <option value="ALL">All Districts</option>
+                {Object.values(District).map(d => <option key={d} value={d}>{d}</option>)}
+              </select>
+            </div>
+
+            {/* Status Filter */}
+            <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg border border-gray-200">
+              <AlertCircle size={18} className="text-gray-400" />
+              <select
+                className="bg-transparent text-sm focus:outline-none text-gray-700 w-full"
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value as any)}
+              >
+                <option value="ALL">All Statuses</option>
+                <option value="MISSING">Missing Only</option>
+                <option value="SAFE">Safe Only</option>
+              </select>
+            </div>
           </div>
 
-          <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0">
-            {/* Sidebar List */}
-            <div className={`lg:col-span-5 flex flex-col gap-4 min-h-0 ${viewMode === 'map' ? 'hidden lg:flex' : 'flex'}`}>
-              {/* Enhanced Search & Filters */}
-              <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 space-y-4">
-                {/* Search Bar */}
-                <div className="relative group">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors" size={20} />
-                  <input
-                    type="text"
-                    placeholder={t.searchPlaceholder}
-                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all text-gray-700 placeholder:text-gray-400"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                  {searchTerm && (
+          {/* Map Section */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+              <h3 className="font-bold text-gray-800 flex items-center gap-2">
+                <MapPin size={18} className="text-blue-600" />
+                People Map
+              </h3>
+              <span className="text-xs text-gray-500 bg-white px-2 py-1 rounded border">
+                Showing {filteredPeople.filter(p => p.coordinates).length} locations
+              </span>
+            </div>
+            <ReliefMap items={filteredPeople} height="400px" legendMode="person" focusedLocation={focusedLocation} />
+          </div>
+
+          {/* Results Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredPeople.map((person) => (
+              <div key={person.id} className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all group relative overflow-hidden">
+                {localStorage.getItem('lankarelief_my_posts')?.includes(person.id) && (
+                  <div className="absolute top-2 right-2 flex gap-1 z-10">
                     <button
-                      onClick={() => setSearchTerm('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-200 transition-colors"
+                      onClick={(e) => { e.stopPropagation(); handleEditClick(person); }}
+                      className="p-1.5 bg-blue-100 text-blue-600 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                      title="Edit"
                     >
-                      <X size={16} />
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                     </button>
-                  )}
-                </div>
-
-
-
-                {/* Advanced Filters Toggle */}
-                <button
-                  onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                  className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors w-full justify-between px-1"
-                >
-                  <span className="flex items-center gap-2">
-                    <Filter size={16} />
-                    Advanced Filters
-                  </span>
-                  {showAdvancedFilters ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </button>
-
-                {/* Collapsible Filters */}
-                {showAdvancedFilters && (
-                  <div className="grid grid-cols-2 gap-3 pt-2 animate-in slide-in-from-top-2 duration-200">
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">District</label>
-                      <select
-                        value={filterDistrict}
-                        onChange={(e) => setFilterDistrict(e.target.value as any)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
-                      >
-                        <option value="ALL">All Districts</option>
-                        {Object.values(District).map(d => <option key={d} value={d}>{d}</option>)}
-                      </select>
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Sort By</label>
-                      <select
-                        value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value as any)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
-                      >
-                        <option value="newest">Newest First</option>
-                        <option value="oldest">Oldest First</option>
-                      </select>
-                    </div>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleDeleteClick(person.id); }}
+                      className="p-1.5 bg-red-100 text-red-600 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                      title="Delete"
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   </div>
                 )}
-              </div>
 
-              {/* Results List - Grid Layout for Desktop */}
-              <div className="flex-1 overflow-y-auto pr-2">
-                <div className="grid grid-cols-1 gap-3">
-                  {filteredPeople.map((person) => (
-                    <div key={person.id} className="bg-white p-3 rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all group relative">
-                      {localStorage.getItem('lankarelief_my_posts')?.includes(person.id) && (
-                        <button
-                          onClick={(e) => { e.stopPropagation(); handleDeleteClick(person.id); }}
-                          className="absolute top-2 right-2 p-1.5 bg-red-100 text-red-600 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                          title="Delete Report"
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                <div
+                  className="p-4 cursor-pointer"
+                  onClick={() => person.coordinates && setFocusedLocation(person.coordinates)}
+                >
+                  <div className="flex items-start gap-4">
+                    {/* Avatar */}
+                    <div className={`w-14 h-14 rounded-full flex items-center justify-center shrink-0 shadow-inner ${person.status === 'SAFE'
+                      ? 'bg-gradient-to-br from-green-100 to-green-200 text-green-600'
+                      : 'bg-gradient-to-br from-red-100 to-red-200 text-red-600'
+                      }`}>
+                      {person.image ? (
+                        <img src={person.image} alt={person.name} className="w-full h-full object-cover rounded-full" />
+                      ) : (
+                        person.status === 'SAFE' ? <UserCheck size={28} /> : <AlertCircle size={28} />
                       )}
-                      {localStorage.getItem('lankarelief_my_posts')?.includes(person.id) && (
-                        <button
-                          onClick={(e) => { e.stopPropagation(); handleEditClick(person); }}
-                          className="absolute top-2 right-10 p-1.5 bg-blue-100 text-blue-600 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                          title="Edit Report"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                        </button>
-                      )}
-                      <div
-                        className="flex gap-3 items-start cursor-pointer"
-                        onClick={() => person.coordinates && setFocusedLocation(person.coordinates)}
-                      >
-                        {/* Avatar / Icon */}
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-inner ${person.status === 'SAFE'
-                          ? 'bg-gradient-to-br from-green-100 to-green-200 text-green-600'
-                          : 'bg-gradient-to-br from-red-100 to-red-200 text-red-600'
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-start mb-1">
+                        <h3 className="font-bold text-lg text-gray-900 truncate pr-2">{person.name}</h3>
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase shadow-sm ${person.status === 'SAFE'
+                          ? 'bg-green-100 text-green-700 border border-green-200'
+                          : 'bg-red-100 text-red-700 border border-red-200'
                           }`}>
-                          {person.status === 'SAFE' ? <UserCheck size={20} /> : <AlertCircle size={20} />}
-                        </div>
+                          {person.status || 'MISSING'}
+                        </span>
+                      </div>
 
-                        <div className="flex-1 min-w-0">
-                          <div className="flex justify-between items-start mb-1">
-                            <h3 className="font-bold text-base text-gray-900 truncate pr-2">{person.name}</h3>
-                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase shadow-sm ${person.status === 'SAFE'
-                              ? 'bg-green-100 text-green-700 border border-green-200'
-                              : 'bg-red-100 text-red-700 border border-red-200'
-                              }`}>
-                              {person.status || 'MISSING'}
-                            </span>
-                          </div>
+                      <div className="flex items-center gap-3 text-xs text-gray-600 mb-2">
+                        <span className="bg-gray-100 px-2 py-0.5 rounded text-gray-700 font-medium">{person.age} Years</span>
+                        <span className="bg-gray-100 px-2 py-0.5 rounded text-gray-700 font-medium">{t[person.gender.toLowerCase() as keyof typeof t] || person.gender}</span>
+                      </div>
 
-                          <div className="flex items-center gap-3 text-xs text-gray-600 mb-2">
-                            <div className="flex items-center gap-1">
-                              <span className="text-gray-400 font-medium">Age:</span>
-                              <span className="font-medium text-gray-800">{person.age || '-'}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <span className="text-gray-400 font-medium">Gender:</span>
-                              <span className="font-medium text-gray-800">{t[person.gender.toLowerCase() as keyof typeof t] || person.gender}</span>
-                            </div>
-                          </div>
-
-                          <div className="flex items-start gap-1.5 text-xs text-gray-600 bg-gray-50 p-1.5 rounded-lg">
-                            <MapPin size={14} className="text-gray-400 shrink-0 mt-0.5" />
-                            <div className="flex-1">
-                              <span className="font-medium text-gray-900 block truncate">{person.lastSeenLocation}</span>
-                              <span className="text-[10px] text-gray-500">{person.district}</span>
-                            </div>
-                          </div>
+                      <div className="flex items-start gap-1.5 text-xs text-gray-600 bg-gray-50 p-2 rounded-lg mb-2">
+                        <MapPin size={14} className="text-gray-400 shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                          <span className="font-medium text-gray-900 block truncate">{person.lastSeenLocation}</span>
+                          <span className="text-[10px] text-gray-500">{person.district}</span>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-                {filteredPeople.length === 0 && (
-                  <div className="text-center py-16 px-6 text-gray-500 bg-white rounded-2xl border border-dashed border-gray-300 flex flex-col items-center justify-center">
-                    <div className="bg-gray-50 p-4 rounded-full mb-4">
-                      <Search size={32} className="text-gray-400" />
-                    </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-1">No results found</h3>
-                    <p className="text-sm text-gray-500 max-w-xs mx-auto">
-                      We couldn't find anyone matching your search. Try adjusting your filters or search terms.
-                    </p>
-                    <button
-                      onClick={() => {
-                        setSearchTerm('');
-                        setFilterStatus('ALL');
-                        setFilterDistrict('ALL');
-                      }}
-                      className="mt-4 text-blue-600 font-semibold text-sm hover:underline"
-                    >
-                      Clear all filters
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
 
-            {/* Map View */}
-            <div className={`lg:col-span-7 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden h-[500px] lg:h-full ${viewMode === 'list' ? 'hidden lg:block' : 'block'}`}>
-              <ReliefMap items={filteredPeople} height="100%" legendMode="person" focusedLocation={focusedLocation} />
-            </div>
+                      {person.physicalDescription && (
+                        <p className="text-xs text-gray-500 line-clamp-2 italic">"{person.physicalDescription}"</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
+
+          {filteredPeople.length === 0 && (
+            <div className="text-center py-12 bg-white rounded-xl border border-dashed border-gray-300">
+              <div className="bg-gray-50 p-4 rounded-full mb-4 w-16 h-16 mx-auto flex items-center justify-center">
+                <Search size={32} className="text-gray-400" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">No results found</h3>
+              <p className="text-sm text-gray-500">Try adjusting your filters</p>
+            </div>
+          )}
         </div>
       ) : (
         <div className="max-w-3xl mx-auto w-full bg-white p-6 rounded-2xl shadow-sm border border-gray-200 overflow-y-auto">

@@ -191,7 +191,7 @@ export const ReliefMap: React.FC<ReliefMapProps> = ({ items, height = '400px', l
         { id: 'cleanup', mode: ['all', 'needs', 'volunteer'], color: 'bg-emerald-500', svg: SVGs.cleanup, label: t.legend.cleanup },
         { id: 'service', mode: ['all', 'needs', 'volunteer'], color: 'bg-indigo-500', svg: SVGs.tools, label: t.legend.service },
         { id: 'volunteer', mode: ['all', 'volunteer'], color: 'bg-purple-500', svg: SVGs.volunteer, label: t.legend.volunteer },
-        { id: 'safe', mode: ['all'], color: 'bg-emerald-500', svg: SVGs.safe, label: t.legend.safe },
+        { id: 'safe', mode: ['all', 'person'], color: 'bg-emerald-500', svg: SVGs.safe, label: t.legend.safe },
         { id: 'missing', mode: ['all', 'person'], color: 'bg-red-500', svg: SVGs.missing, label: t.legend.missing, textColor: 'text-red-600 font-bold' },
         { id: 'event', mode: ['all'], color: 'bg-pink-500', svg: SVGs.default, label: t.legend.event },
     ];
