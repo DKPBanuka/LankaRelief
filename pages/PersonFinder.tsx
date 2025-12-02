@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useLanguage } from '../context/LanguageContext';
 import { Person, District, Coordinates } from '../types';
-import { refineNeedDescription } from '../services/geminiService';
+import { refineNeedDescription, generateBilingualDescription } from '../services/geminiService';
 import { Search, MapPin, UserCheck, AlertCircle, Loader2, Filter, Plus, Upload, AlertTriangle, Info, ChevronDown, ChevronUp, X, Trash2, Sparkles } from 'lucide-react';
 import { ReliefMap } from '../components/Map/ReliefMap';
 import { LocationPicker } from '../components/Map/LocationPicker';
@@ -264,7 +264,7 @@ export const PersonFinder: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+
 
   return (
     <div className="h-[calc(100vh-100px)] flex flex-col animate-in fade-in duration-500">
