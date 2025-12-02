@@ -2,9 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Need, Person, Event, NeedStatus, Volunteer, ServiceRequest } from '../types';
 import { db, storage } from '../services/firebase';
 import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, runTransaction, getDoc } from 'firebase/firestore';
-import { ref, uploadString, getDownloadURL } from 'firebase/storage';
-import { httpsCallable } from 'firebase/functions';
-import { functions } from '../services/firebase';
+import { ref } from 'firebase/storage';
 
 interface AppContextType {
   needs: Need[];
@@ -215,14 +213,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const addPerson = async (person: Person) => {
     try {
-      console.log("Starting addPerson...", { id: person.id, hasImage: !!person.image });
-      // Image upload removed as per user request
-      const imageUrl = '';
-
       const { id, ...personData } = person;
-
-      // We allow base64 now if it was the fallback
-      const cleanData = sanitizeData({ ...personData, image: imageUrl });
+      const cleanData = sanitizeData(personData);
       console.log("Saving to Firestore...", cleanData);
 
       const docRef = await addDoc(collection(db, 'people'), cleanData);
